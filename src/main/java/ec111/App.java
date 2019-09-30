@@ -1,13 +1,10 @@
 package ec111;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args )
     {
+        //Primer commit
         System.out.println( "Hello World!" );
     }
 }
