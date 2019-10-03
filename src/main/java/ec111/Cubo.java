@@ -8,7 +8,12 @@ package ec111;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.security.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -139,5 +144,45 @@ public class Cubo {
     private void moverD(boolean sentido, int num) {
         //TO-DO
     }
+    
+    /**
+     * Convierte el cubo en un JSON
+     * @param ruta del JSON que se va a crear
+     */
+    public void toJson(String ruta){
+        //TO-DO
+    }
+ 
+     /**
+      * Convierte el cubo en un String de numeros del formato del JSON dejando solo los numeros
+      * @return String necesario para el MD5
+      */   
+    @Override
+    public String toString() {
+        //TO-DO
+        return matriz.toString();
+    }
+    
+    
+    /**
+     * Convierte el cubo a MD5
+     * @return Codigo MD5
+     */
+    public byte[] toMD5() {
+        try {
+            byte[] bytesCubo = this.toString().getBytes("UTF-8");
+            MessageDigest md = MessageDigest.getInstance("MD5");
+           return md.digest(bytesCubo);
+        } catch (UnsupportedEncodingException ex) {
+            
+        } catch (NoSuchAlgorithmException ex) {
+           
+        }
+        return null;
+    }
+    
+
+    
+    
 
 }
