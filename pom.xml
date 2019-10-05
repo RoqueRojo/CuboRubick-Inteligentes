@@ -9,7 +9,7 @@
   <version>1.0</version>
   <packaging>jar</packaging>
   <name>inteligentes</name>
-  <url>https://github.com/RoqueRojo/EC1-11.git</url>
+  <url>https://github.com/RoqueRojo/EBC1-7.git</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
