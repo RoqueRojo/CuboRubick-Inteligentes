@@ -3,6 +3,9 @@ package ebc17;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.Map;
 import org.json.simple.JSONArray;
@@ -10,18 +13,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
- *
- * @author Roque
- */
 public class Cubo  implements Cloneable{
     private int N; // numero filas del cubo
-    private int LEFT [][];
-    private int DOWN [][];
-    private int RIGHT [][];
-    private int UP [][];
-    private int BACK [][];
-    private int FRONT [][];
+    private int LEFT [][]; //Cara izquierda del cubo
+    private int DOWN [][]; //Cara inferior
+    private int RIGHT [][]; //Cara derecha
+    private int UP [][]; // cara superior
+    private int BACK [][];// cara trasera
+    private int FRONT [][];// cara inferior
     
     public Cubo (int N) throws IOException, FileNotFoundException, ParseException {
         this.LEFT= new int [N][N];
@@ -31,7 +30,7 @@ public class Cubo  implements Cloneable{
         this.BACK= new int [N][N];
         this.FRONT= new int [N][N];
         this.N=N;
-        leerJSON("cube.json.txt");
+        leerJSON("cube.json.txt"); //leemos el fichero json pasandole el nombre del fichero o la cadena
     }
     //metodo que clona un cubo
     public Object clone(){
@@ -71,9 +70,9 @@ public class Cubo  implements Cloneable{
         for(int i=0; i<obj.FRONT.length; i++){
             obj.FRONT[i]=(int[])obj.FRONT[i].clone();
         }
-        return obj; //devolvemos un clon del cubo
+        return obj; //devolvemos una copia exacta del cubo
     }
-    
+    //metodo que lee el fichero json proporcionado.
     public void leerJSON (String fileJSON) throws FileNotFoundException, IOException, ParseException{
         String caras []={"LEFT","DOWN","RIGHT","UP","BACK","FRONT"};
         int fila =0;
@@ -89,12 +88,12 @@ public class Cubo  implements Cloneable{
             while(iterator.hasNext()){
                 lista =(JSONArray)iterator.next();
                 for (int i =0;i<lista.size();i++){
-                    
+                    //lo va añadiendo segun la cara que le corresponda
                     switch(caras[k]){
                         case "LEFT":
                             this.LEFT[fila][i]=(int)((long) lista.get(i));
                             break;
-                            case "DOWN":
+                        case "DOWN":
                             this.DOWN[fila][i]=(int)((long) lista.get(i));
                             break;
                         case "RIGHT":
@@ -115,7 +114,40 @@ public class Cubo  implements Cloneable{
             }
         }
     }
-    public void mostrarCara(String cara){
+    
+    public String getID() { //crea un String con los valores de las casillas del cubo luego llamada al metodo del md5 con ese String y el metodo lo cifra
+        String ID="";
+        String caras[]={"LEFT","DOWN","RIGHT","UP","BACK","FRONT"};
+        for (int k=0;k<caras.length;k++){
+            for (int i=0;i<N;i++) {  
+                for (int j=0;j<N;j++) { 
+                    switch (caras[i]) {
+                        case "LEFT":
+                            ID+=LEFT[i][j];
+                            break;
+                        case "DOWN":
+                            ID+=DOWN[i][j];
+                            break;
+                        case "RIGHT":
+                            ID+=RIGHT[i][j];
+                            break;
+                        case "UP":
+                            ID+=UP[i][j];
+                            break;
+                        case "BACK":
+                            ID+=BACK[i][j];
+                            break;
+                        case "FRONT":
+                            ID+=FRONT[i][j];
+                            break;        
+                    }          
+                }    
+            }
+        }
+        return getMD5(ID); //devuelve el ID cigrado
+    }
+    
+    public void mostrarCara(String cara){ //muestra la cara del cubo que seleccionemos
         for (int i=0;i<N;i++) {  
             for (int j=0;j<N;j++) { 
                 switch (cara) {
@@ -142,4 +174,21 @@ public class Cubo  implements Cloneable{
             System.out.println();
         }
     }
+    public static String getMD5(String input) { //metodo que cifra un String
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+ 
+            while(hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    } 
+    
 }
