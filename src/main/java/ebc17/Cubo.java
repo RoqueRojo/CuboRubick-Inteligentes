@@ -190,5 +190,71 @@ public class Cubo  implements Cloneable{
             throw new RuntimeException(e);
         }
     } 
+   
+    public void moveL (int col) {
+        int aux[]=new int[N];
+        for (int i=0;i<N;i++) {       
+            aux[i]=FRONT[i][col];
+            FRONT[i][col]= UP[N-i-1][N-col-1];
+            UP[N-i-1][N-col-1]= BACK[i][col];
+            BACK[i][col]= DOWN[i][col];
+            DOWN[i][col]=aux[i];
+        }
+    }
+    
+    public void movel (int col) {
+        int aux[]=new int[N];
+        for (int i=0;i<N;i++) {       
+            aux[i]=BACK[i][col];
+            BACK[i][col]= UP[N-i-1][N-col-1];
+            UP[N-i-1][N-col-1]= FRONT[i][col];
+            FRONT[i][col]= DOWN[i][col];
+            DOWN[i][col]=aux[i];
+        }
+    }
+    
+    public void moveD (int dentro) {
+        int aux[]=new int[N];
+        for (int i=0;i<N;i++) {  
+            aux[i]=FRONT[i][dentro];
+            FRONT[0][i]=RIGHT[N-1-i][dentro];
+            RIGHT[i][dentro]=BACK[N-1][i];
+            BACK[N-1][i]=LEFT[N-1-i][N-1];
+            LEFT[i][N-1]=aux[i];
+        }
+    }
+    
+    public void moved (int dentro) {
+        int aux[]=new int[N];
+        for (int i=0;i<N;i++) {  
+            aux[i]=FRONT[i][dentro];
+            FRONT[dentro][i]=LEFT[i][N-1];
+            LEFT[N-1][i]=BACK[N-1][N-1-i];
+            BACK[N-1][i]=RIGHT[i][dentro];
+            RIGHT[N-1-i][dentro]=aux[i];
+        }
+    }
+    
+    public void moveB (int fil) {
+        int aux[]=new int[N];
+        for (int i=0;i<N;i++) {       
+            aux[i]=FRONT[fil][i];
+            FRONT[fil][i]= UP[N-fil-1][N-i-1];
+            UP[N-fil-1][N-i-1]= BACK[fil][i];
+            BACK[fil][i]= DOWN[fil][i];
+            DOWN[fil][i]=aux[i];
+        }
+    }
+    
+    public void moveb (int fil) {
+        int aux[]=new int[N];
+        for (int i=0;i<N;i++) {       
+            aux[i]=BACK[fil][i];
+            BACK[fil][i]= UP[N-fil-1][N-i-1];
+            UP[N-fil-1][N-i-1]= FRONT[fil][i];
+            FRONT[fil][i]= DOWN[fil][i];
+            DOWN[fil][i]=aux[i];
+        }
+    }
     
 }
