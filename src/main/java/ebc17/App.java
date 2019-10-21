@@ -8,24 +8,36 @@ public class App
 {
     public static void main( String[] args ) throws IOException, FileNotFoundException, ParseException
     {
-        Cubo cubo = new Cubo (3);
-        
-        System.out.println("El identificador inical del cubo es de "+cubo.getID());
-        cubo.mostrarCara("FRONT");
-        cubo.moveL(0);
-        cubo.moveB(2);
+        Cubo cubo = new Cubo (10); 
+      //  cubo.mostrarCara("LEFT");
+//        cubo.mostrarCara("UP");
+//        cubo.mostrarCara("DOWN");
+//        cubo.mostrarCara("BACK");
+//        cubo.mostrarCara("RIGHT");
+//        cubo.mostrarCara("FRONT");
+        cubo.movel(3);
+        cubo.moveD(1);
         cubo.movel(1);
-        cubo.moveb(1);
-        System.out.println("El identificador despues de realizar una serie de movimientos es de "+cubo.getID());
-        cubo.mostrarCara("FRONT");
-        cubo.moveB(1);
+        cubo.moved(0);
+        cubo.moveB(0);
+        cubo.moveb(5);
+        cubo.movel(2);
+        cubo.moved(1);
+        
+        cubo.moveD(1);
+        cubo.moveL(2);
+        cubo.moveB(5);
+        cubo.moveb(0);
+        cubo.moveD(0);
         cubo.moveL(1);
-        cubo.moveb(2);
-        cubo.movel(0);
-        
-               
-        System.out.println("El identificador despues de realizar los movimientos es de "+cubo.getID());
+        cubo.moved(1);
+        cubo.moveL(3);
+        cubo.mostrarCara("LEFT");
+        cubo.mostrarCara("UP");
+        cubo.mostrarCara("DOWN");
+        cubo.mostrarCara("BACK");
+        cubo.mostrarCara("RIGHT");
         cubo.mostrarCara("FRONT");
-        
+
     }
 }
