@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Cubo implements Cloneable {
+public class Estado implements Cloneable {
 
     private int N; // numero filas del cubo
     private int LEFT[][]; //Cara izquierda del cubo
@@ -23,22 +24,21 @@ public class Cubo implements Cloneable {
     private int BACK[][];// cara trasera
     private int FRONT[][];// cara inferior
 
-    public Cubo(int N) throws IOException, FileNotFoundException, ParseException {
+    public Estado() throws IOException, FileNotFoundException, ParseException {
+        this.N=getN("cube.json.txt");
         this.LEFT = new int[N][N];
         this.DOWN = new int[N][N];
         this.RIGHT = new int[N][N];
         this.UP = new int[N][N];
         this.BACK = new int[N][N];
-        this.FRONT = new int[N][N];
-        this.N = N;
+        this.FRONT = new int[N][N];        
         leerJSON("cube.json.txt"); //leemos el fichero json pasandole el nombre del fichero o la cadena
     }
-
     //metodo que clona un cubo
     public Object clone() {
-        Cubo obj = null;
+        Estado obj = null;
         try {
-            obj = (Cubo) super.clone();
+            obj = (Estado) super.clone();
         } catch (CloneNotSupportedException ex) {
             System.out.println("El cubo no se ha podido duplicar");
         }
@@ -75,6 +75,12 @@ public class Cubo implements Cloneable {
         return obj; //devolvemos una copia exacta del cubo
     }
 
+    public int getN(String fileJSON) throws FileNotFoundException, IOException, ParseException {
+        Object obj = new JSONParser().parse(new FileReader(fileJSON));
+        JSONObject jo = (JSONObject) obj;
+        JSONArray general = ((JSONArray) jo.get("LEFT"));
+        return general.size();
+    }    
     //metodo que lee el fichero json proporcionado.
     public void leerJSON(String fileJSON) throws FileNotFoundException, IOException, ParseException {
         String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
@@ -124,7 +130,7 @@ public class Cubo implements Cloneable {
         for (int k = 0; k < caras.length; k++) {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                    switch (caras[i]) {
+                    switch (caras[k]) {
                         case "LEFT":
                             ID += LEFT[i][j];
                             break;
@@ -195,7 +201,7 @@ public class Cubo implements Cloneable {
         }
     }
 
-    public void moveL(int col) { //bien segun ellos
+    public void moveL(int col) { 
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
             aux[i] = FRONT[i][col];
@@ -208,11 +214,11 @@ public class Cubo implements Cloneable {
             copiarMatriz(rotarMatrizIzq(LEFT), LEFT);
         }
         if (col == N - 1) {
-            copiarMatriz(rotarMatrizDer(RIGHT),RIGHT);           
+            copiarMatriz(rotarMatrizDer(RIGHT), RIGHT);
         }
     }
 
-    public void movel(int col) { //bien segun ellos
+    public void movel(int col) { 
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
             aux[i] = BACK[i][col];
@@ -224,12 +230,12 @@ public class Cubo implements Cloneable {
         if (col == 0) {
             copiarMatriz(rotarMatrizDer(LEFT), LEFT);
         }
-        if (col==N-1) {
-            copiarMatriz(rotarMatrizIzq(RIGHT),RIGHT);
+        if (col == N - 1) {
+            copiarMatriz(rotarMatrizIzq(RIGHT), RIGHT);
         }
     }
 
-    public void moveD(int dentro) {       //bien segun ellos 
+    public void moveD(int dentro) {       
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
             aux[i] = FRONT[dentro][i];
@@ -238,11 +244,11 @@ public class Cubo implements Cloneable {
             BACK[N - 1 - dentro][N - 1 - i] = LEFT[i][N - 1 - dentro];
             LEFT[i][N - 1 - dentro] = aux[i];
         }
-        if (dentro==0){
-             copiarMatriz(rotarMatrizDer(DOWN), DOWN);
+        if (dentro == 0) {
+            copiarMatriz(rotarMatrizDer(DOWN), DOWN);
         }
-        if (dentro==N-1) {
-            copiarMatriz(rotarMatrizIzq(UP),UP);
+        if (dentro == N - 1) {
+            copiarMatriz(rotarMatrizIzq(UP), UP);
         }
     }
 
@@ -255,11 +261,11 @@ public class Cubo implements Cloneable {
             BACK[N - 1 - dentro][N - 1 - i] = RIGHT[N - 1 - i][dentro];
             RIGHT[N - 1 - i][dentro] = aux[i];
         }
-        if (dentro==0){
-             copiarMatriz(rotarMatrizIzq(DOWN), DOWN);
+        if (dentro == 0) {
+            copiarMatriz(rotarMatrizIzq(DOWN), DOWN);
         }
-        if (dentro==N-1) {
-            copiarMatriz(rotarMatrizDer(UP),UP);
+        if (dentro == N - 1) {
+            copiarMatriz(rotarMatrizDer(UP), UP);
         }
     }
 
@@ -272,13 +278,12 @@ public class Cubo implements Cloneable {
             UP[fil][i] = RIGHT[fil][i];
             RIGHT[fil][i] = aux[i];
         }
-        if(fil ==0){
+        if (fil == 0) {
             copiarMatriz(rotarMatrizDer(BACK), BACK);
         }
-        if (fil==N-1) {
-            copiarMatriz(rotarMatrizIzq(FRONT),FRONT);
+        if (fil == N - 1) {
+            copiarMatriz(rotarMatrizIzq(FRONT), FRONT);
         }
-        
     }
 
     public void moveb(int fil) {
@@ -290,12 +295,24 @@ public class Cubo implements Cloneable {
             UP[fil][i] = LEFT[fil][i];
             LEFT[fil][i] = aux[i];
         }
-        if(fil ==0){
+        if (fil == 0) {
             copiarMatriz(rotarMatrizIzq(BACK), BACK);
         }
-        if (fil==N-1) {
-            copiarMatriz(rotarMatrizDer(FRONT),FRONT);
+        if (fil == N - 1) {
+            copiarMatriz(rotarMatrizDer(FRONT), FRONT);
         }
+    }
+
+    public int[][] rotarMatrizIzq(int matriz[][]) {
+        int[][] otherMatriz = new int[matriz[0].length][matriz[0].length];
+        for (int i = 0; i < matriz.length; i++) {
+            int k = 0;
+            for (int j = matriz[0].length - 1; j >= 0; j--) {
+                otherMatriz[j][i] = matriz[i][k];
+                k++;
+            }
+        }
+        return otherMatriz;
     }
 
     public int[][] rotarMatrizDer(int matriz[][]) {
@@ -317,16 +334,81 @@ public class Cubo implements Cloneable {
             }
         }
     }
-
-    public int[][] rotarMatrizIzq(int matriz[][]) {
-        int[][] otherMatriz = new int[matriz[0].length][matriz[0].length];
-        for (int i = 0; i < matriz.length; i++) {
-            int k = 0;
-            for (int j = matriz[0].length - 1; j >= 0; j--) {
-                otherMatriz[j][i] = matriz[i][k];
-                k++;
+    
+    public Estado getEstado(Accion a){ //metodo que ontiene el estado de un clon del cubo despues de realizar una accion
+        Estado estado = (Estado)this.clone();
+        switch(a.getMovimiento()){
+            case 'L':
+                estado.moveL(a.getPosicion());
+                break;
+            case 'B':
+                 estado.moveB(a.getPosicion());
+                break;
+            case 'D':
+                 estado.moveD(a.getPosicion());
+                break;
+            case 'l':
+                 estado.movel(a.getPosicion());
+                break;
+            case 'b':
+                 estado.moveb(a.getPosicion());
+                break;
+            case 'd':
+                 estado.moved(a.getPosicion());
+                break;
+        }
+        return estado;
+    }
+    
+    public List<Accion> getAcciones(){ //metodo que obtiene una lista con todas las acciones posibles, segun la N del cubo
+        List<Accion> acciones = new ArrayList<Accion>();
+        for (int i = 0; i <N; i++) {
+            acciones.add(new Accion('L',i));
+            acciones.add(new Accion('B',i));
+            acciones.add(new Accion('D',i));
+            acciones.add(new Accion('l',i));
+            acciones.add(new Accion('b',i));
+            acciones.add(new Accion('d',i));
+        }
+        return acciones;
+    }
+    
+    public boolean esObjetivo(){
+        boolean correcto =true;
+        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
+        for (int k =0;k<caras.length;k++){
+            for(int i = 0;i<LEFT.length;i++){
+                for(int j =0;j<LEFT.length;j++){
+                    switch (caras[k]){
+                        case "LEFT":
+                            if(LEFT [i][j]!=4)
+                                correcto = false;
+                            break;
+                        case "DOWN":
+                            if(DOWN [i][j]!=1)
+                                correcto = false;
+                            break;
+                        case "RIGHT":
+                            if(RIGHT [i][j]!=5)
+                                correcto = false;
+                            break;
+                        case "UP":
+                            if(UP [i][j]!=0)
+                                correcto = false;
+                            break;
+                        case "BACK":
+                            if(BACK [i][j]!=3)
+                                correcto = false;
+                            break;
+                        case "FRONT":
+                            if(FRONT [i][j]!=2)
+                                correcto = false;
+                            break;
+                    }
+                }
             }
         }
-        return otherMatriz;
+        return correcto;
     }
+
 }
