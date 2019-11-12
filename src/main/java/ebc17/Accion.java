@@ -3,7 +3,7 @@ package ebc17;
 
 
 public class Accion {
-    private enum movimientos {L,B,D};
+    
     private char movimiento; 
     private int posicion;
 

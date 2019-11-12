@@ -24,15 +24,15 @@ public class Estado implements Cloneable {
     private int BACK[][];// cara trasera
     private int FRONT[][];// cara inferior
 
-    public Estado() throws IOException, FileNotFoundException, ParseException {
-        this.N=getN("cube.json.txt");
+    public Estado(String fileJSON) throws IOException, FileNotFoundException, ParseException {
+        this.N=getN(fileJSON);
         this.LEFT = new int[N][N];
         this.DOWN = new int[N][N];
         this.RIGHT = new int[N][N];
         this.UP = new int[N][N];
         this.BACK = new int[N][N];
         this.FRONT = new int[N][N];        
-        leerJSON("cube.json.txt"); //leemos el fichero json pasandole el nombre del fichero o la cadena
+        leerJSON(fileJSON); //leemos el fichero json pasandole el nombre del fichero o la cadena
     }
     //metodo que clona un cubo
     public Object clone() {

@@ -22,7 +22,7 @@ public class App {
         boolean correcto, hayPoda, solucion = false;
         int Prof_Max = 100, Inc_Prof = 1;
         Scanner sc = new Scanner(System.in);
-        Problema prob = new Problema("Ciudad Real.json");
+        Problema prob = new Problema();
 
         do {
             System.out.print("1. Con Poda \n2. Sin Poda\n Escribe Opcion 1 o 2: ");
@@ -111,7 +111,7 @@ public class App {
         int total = 0;
         Frontera frontera = new Frontera();
         frontera.CrearFronteraVacia();
-        NodoArbol n_inicial = new NodoArbol(null, prob.getEstadoInicial(), 0, null, 0, 0);
+        NodoArbol n_inicial = new NodoArbol(null, prob.getEstadoInicial(), 0, null, 0, 0);//he puesto null
         frontera.Insertar(n_inicial);
         boolean solucion = false;
         NodoArbol n_actual = null;
@@ -119,20 +119,21 @@ public class App {
         Deque<NodoArbol> nodosSolucion = new LinkedList(); // cola doble para almacenar la solución generada
 
         while (!solucion && !frontera.EstaVacia()) {
+            
             n_actual = frontera.Eliminar();
-            if (prob.esObjetivo(n_actual.getEstado())) {
+            if (prob.esObjetivo(n_actual.getEstado())) {                
                 solucion = true;
             } else {
-                //subir esto más parriba por que aunque no espanda los caminos, creo nodos ya visitados y es mejor no crearlos dice que es poda parcial.
+                
                 List<Sucesor> LS = prob.getEspacioDeEstados().getSucesores(n_actual.getEstado());
+                System.out.println(LS.size());
                 List<NodoArbol> LN = CreaListaNodosArbol(LS, n_actual, Prof_Max, estrategia);
 
                 for (NodoArbol nodo : LN) {
                     if (conPoda) { // si se ha elegido poda no se insertan en la frontera los estados repetidos                   
-                        String nodoString = nodo.getEstado().getID();
+                        String nodoString = nodo.getEstado().getID(); //.getIncident
                         if (nodosVisitados.containsKey(nodoString)) {
-                            if ((nodo.getF() < nodosVisitados.get(nodoString).intValue() && !estrategia.contains("Profundidad"))
-                                    || (nodo.getF() > nodosVisitados.get(nodoString).intValue() && estrategia.contains("Profundidad"))) {
+                            if ((nodo.getF() < nodosVisitados.get(nodoString).intValue())) {
                                 frontera.Insertar(nodo);
                                 total++;
                                 nodosVisitados.replace(nodoString, nodo.getF());//                                                          
@@ -179,7 +180,7 @@ public class App {
                     case "ProfundidadAcotada":
                     case "ProfundidadIterativa":
                         aux = new NodoArbol(n_actual, sucesor.getEstado(), n_actual.getCoste() + sucesor.getCoste(), sucesor.getAccion(),
-                                n_actual.getP() + 1, Prof_Max - (n_actual.getP() + 1));
+                                n_actual.getP() + 1, 1/(n_actual.getP()) + 1);
                         break;
                     case "CosteUniforme":
                         aux = new NodoArbol(n_actual, sucesor.getEstado(), n_actual.getCoste() + sucesor.getCoste(), sucesor.getAccion(),
@@ -269,3 +270,4 @@ public class App {
     }
 
 }
+
