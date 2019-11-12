@@ -1,7 +1,6 @@
 
 package ebc17;
 
-
 public class Sucesor {
     private Accion accion;
     private Estado estado;

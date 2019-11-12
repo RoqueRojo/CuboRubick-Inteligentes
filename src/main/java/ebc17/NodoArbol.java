@@ -3,6 +3,7 @@ package ebc17;
 
 
 public class NodoArbol implements Comparable<NodoArbol> {
+    
     private NodoArbol padre;
     private Estado estado;
     private double coste;
@@ -75,4 +76,10 @@ public class NodoArbol implements Comparable<NodoArbol> {
         }
         return r;
     }
+
+    @Override
+    public String toString() {
+        return "NodoArbol{" + "padre=" + padre + ", estado=" + estado + ", coste=" + coste + ", accion=" + accion + ", p=" + p + ", f=" + f + '}';
+    }
+
 }

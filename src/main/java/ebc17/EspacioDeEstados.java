@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class EspacioDeEstados {
-    
+    //TOMA COMO ENTRADA EL NOMBRE DEL FICHERO JSON
     public EspacioDeEstados(){}
     
     public List<Sucesor> getSucesores(Estado estado){ //metodo que obtiene una lista de los sucesores a partir de cierto estado.

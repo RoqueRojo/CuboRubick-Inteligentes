@@ -17,8 +17,8 @@ public class Frontera {
         colaNodos.add(n);
     }
 
-    public void Eliminar() {
-        colaNodos.remove();
+    public NodoArbol Eliminar() {
+        return colaNodos.remove();
     }
 
     public boolean EstaVacia() {

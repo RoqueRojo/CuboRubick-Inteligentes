@@ -410,5 +410,8 @@ public class Estado implements Cloneable {
         }
         return correcto;
     }
-
+    public int getHeuristica(){
+        int heuristica=0;
+    return heuristica;
+    }
 }

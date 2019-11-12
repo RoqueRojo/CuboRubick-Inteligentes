@@ -6,13 +6,13 @@ public class Problema {
     private EspacioDeEstados espacioDeEstados;
     private Estado estadoInicial;
 
-    public Problema(EspacioDeEstados espacioDeEstados, Estado estadoInicial) {
+    public Problema(String s) {
         this.espacioDeEstados = espacioDeEstados;
         this.estadoInicial = estadoInicial;
     }
     
     public boolean esObjetivo (Estado estado) {
-        return estadoInicial.esObjetivo();
+        return estado.esObjetivo();
     }
 
     public EspacioDeEstados getEspacioDeEstados() {

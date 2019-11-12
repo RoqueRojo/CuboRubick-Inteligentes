@@ -1,16 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ebc17;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Roque
- */
 public class Frontera2 {
      private ArrayList<NodoArbol> arrayList = new ArrayList<NodoArbol>();
     
