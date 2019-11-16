@@ -22,7 +22,7 @@ public class Accion {
 
     @Override
     public String toString() {
-        return "Accion:" + " movimiento= " + movimiento + ", posicion= " + posicion;
+        return "Accion="+movimiento+""+posicion;
     }
     
 }

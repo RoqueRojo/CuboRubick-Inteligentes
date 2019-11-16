@@ -25,15 +25,16 @@ public class Estado implements Cloneable {
     private int FRONT[][];// cara inferior
 
     public Estado(String fileJSON) throws IOException, FileNotFoundException, ParseException {
-        this.N=getN(fileJSON);
+        this.N = getN(fileJSON);
         this.LEFT = new int[N][N];
         this.DOWN = new int[N][N];
         this.RIGHT = new int[N][N];
         this.UP = new int[N][N];
         this.BACK = new int[N][N];
-        this.FRONT = new int[N][N];        
+        this.FRONT = new int[N][N];
         leerJSON(fileJSON); //leemos el fichero json pasandole el nombre del fichero o la cadena
     }
+
     //metodo que clona un cubo
     public Object clone() {
         Estado obj = null;
@@ -80,7 +81,8 @@ public class Estado implements Cloneable {
         JSONObject jo = (JSONObject) obj;
         JSONArray general = ((JSONArray) jo.get("LEFT"));
         return general.size();
-    }    
+    }
+
     //metodo que lee el fichero json proporcionado.
     public void leerJSON(String fileJSON) throws FileNotFoundException, IOException, ParseException {
         String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
@@ -126,7 +128,7 @@ public class Estado implements Cloneable {
 
     public String getID() { //crea un String con los valores de las casillas del cubo luego llamada al metodo del md5 con ese String y el metodo lo cifra
         String ID = "";
-        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
+        String caras[] = {"BACK", "DOWN", "FRONT", "LEFT", "RIGHT", "UP"};
         for (int k = 0; k < caras.length; k++) {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
@@ -201,7 +203,7 @@ public class Estado implements Cloneable {
         }
     }
 
-    public void moveL(int col) { 
+    public void moveL(int col) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
             aux[i] = FRONT[i][col];
@@ -218,7 +220,7 @@ public class Estado implements Cloneable {
         }
     }
 
-    public void movel(int col) { 
+    public void movel(int col) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
             aux[i] = BACK[i][col];
@@ -235,7 +237,7 @@ public class Estado implements Cloneable {
         }
     }
 
-    public void moveD(int dentro) {       
+    public void moveD(int dentro) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
             aux[i] = FRONT[dentro][i];
@@ -265,7 +267,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizIzq(DOWN), DOWN);
         }
         if (dentro == N - 1) {
-            copiarMatriz(rotarMatrizDer(UP), UP);
+            copiarMatriz(rotarMatrizIzq(UP), UP);
         }
     }
 
@@ -282,7 +284,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizDer(BACK), BACK);
         }
         if (fil == N - 1) {
-            copiarMatriz(rotarMatrizIzq(FRONT), FRONT);
+            copiarMatriz(rotarMatrizDer(FRONT), FRONT);
         }
     }
 
@@ -334,75 +336,81 @@ public class Estado implements Cloneable {
             }
         }
     }
-    
-    public Estado getEstado(Accion a){ //metodo que ontiene el estado de un clon del cubo despues de realizar una accion
-        Estado estado = (Estado)this.clone();
-        switch(a.getMovimiento()){
+
+    public Estado getEstado(Accion a) { //metodo que ontiene el estado de un clon del cubo despues de realizar una accion
+        Estado estado = (Estado) this.clone();
+        switch (a.getMovimiento()) {
             case 'L':
                 estado.moveL(a.getPosicion());
                 break;
             case 'B':
-                 estado.moveB(a.getPosicion());
+                estado.moveB(a.getPosicion());
                 break;
             case 'D':
-                 estado.moveD(a.getPosicion());
+                estado.moveD(a.getPosicion());
                 break;
             case 'l':
-                 estado.movel(a.getPosicion());
+                estado.movel(a.getPosicion());
                 break;
             case 'b':
-                 estado.moveb(a.getPosicion());
+                estado.moveb(a.getPosicion());
                 break;
             case 'd':
-                 estado.moved(a.getPosicion());
+                estado.moved(a.getPosicion());
                 break;
         }
         return estado;
     }
-    
-    public List<Accion> getAcciones(){ //metodo que obtiene una lista con todas las acciones posibles, segun la N del cubo
+
+    public List<Accion> getAcciones() { //metodo que obtiene una lista con todas las acciones posibles, segun la N del cubo
         List<Accion> acciones = new ArrayList<Accion>();
-        for (int i = 0; i <N; i++) {
-            acciones.add(new Accion('L',i));
-            acciones.add(new Accion('B',i));
-            acciones.add(new Accion('D',i));
-            acciones.add(new Accion('l',i));
-            acciones.add(new Accion('b',i));
-            acciones.add(new Accion('d',i));
+        for (int i = 0; i < N; i++) {
+            acciones.add(new Accion('L', i));
+            acciones.add(new Accion('B', i));
+            acciones.add(new Accion('D', i));
+            acciones.add(new Accion('l', i));
+            acciones.add(new Accion('b', i));
+            acciones.add(new Accion('d', i));
         }
         return acciones;
     }
-    
-    public boolean esObjetivo(){
-        boolean correcto =true;
+
+    public boolean esObjetivo() {
+        boolean correcto = true;
         String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
-        for (int k =0;k<caras.length;k++){
-            for(int i = 0;i<LEFT.length;i++){
-                for(int j =0;j<LEFT.length;j++){
-                    switch (caras[k]){
+        for (int k = 0; k < caras.length && correcto; k++) {
+            for (int i = 0; i < LEFT.length && correcto; i++) {
+                for (int j = 0; j < LEFT.length && correcto; j++) {
+                    switch (caras[k]) {
                         case "LEFT":
-                            if(LEFT [i][j]!=4)
+                            if (LEFT[i][j] != LEFT[0][0]) {
                                 correcto = false;
+                            }
                             break;
                         case "DOWN":
-                            if(DOWN [i][j]!=1)
+                            if (DOWN[i][j] != DOWN[0][0]) {
                                 correcto = false;
+                            }
                             break;
                         case "RIGHT":
-                            if(RIGHT [i][j]!=5)
+                            if (RIGHT[i][j] != RIGHT[0][0]) {
                                 correcto = false;
+                            }
                             break;
                         case "UP":
-                            if(UP [i][j]!=0)
+                            if (UP[i][j] != UP[0][0]) {
                                 correcto = false;
+                            }
                             break;
                         case "BACK":
-                            if(BACK [i][j]!=3)
+                            if (BACK[i][j] != BACK[0][0]) {
                                 correcto = false;
+                            }
                             break;
                         case "FRONT":
-                            if(FRONT [i][j]!=2)
+                            if (FRONT[i][j] != FRONT[0][0]) {
                                 correcto = false;
+                            }
                             break;
                     }
                 }
@@ -410,8 +418,101 @@ public class Estado implements Cloneable {
         }
         return correcto;
     }
-    public int getHeuristica(){
-        int heuristica=0;
-    return heuristica;
+
+    public double log(double num, int base) {
+        return (Math.log(num) / Math.log(base));
+    }
+
+    public double getHeuristica() {
+        double entropia = 0;
+        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
+        double contador[] = new double[caras.length];
+        for (int k = 0; k < caras.length; k++) {
+            contador = contarColoresCara(caras[k], contador);
+            for (int i = 0; i < caras.length; i++) {
+                if (contador[i] > 0.0) {                
+                    entropia = entropia + contador[i]/(N*N)*log(contador[i]/(N*N),6);
+                    System.out.println(entropia);
+                }              
+            }
+        }
+
+        return entropia;
+    }
+
+    public double[] contarColoresCara(String cara, double[] contador) {
+
+        for (int k = 0; k < contador.length; k++) {
+            for (int i = 0; i < LEFT.length; i++) {
+                for (int j = 0; j < LEFT.length; j++) {
+                    switch (cara) {
+                        case "LEFT":
+                            if (LEFT[i][j] == k) {
+                                contador[k]++;
+                            }
+                            break;
+                        case "DOWN":
+                            if (DOWN[i][j] == k) {
+                                contador[k]++;
+                            }
+                            break;
+                        case "RIGHT":
+                            if (RIGHT[i][j] == k) {
+                                contador[k]++;
+                            }
+                            break;
+                        case "UP":
+                            if (UP[i][j] == k) {
+                                contador[k]++;
+                            }
+                            break;
+                        case "BACK":
+                            if (BACK[i][j] == k) {
+                                contador[k]++;
+                            }
+                            break;
+                        case "FRONT":
+                            if (FRONT[i][j] == k) {
+                                contador[k]++;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        return contador;
+    }
+
+    public String toString() {
+        String s = "";
+        s += "LEFT                    DOWN                    "
+                + "RIGHT                   UP                       BACK                    FRONT\n";
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                s += LEFT[i][j] + " ";
+            }
+            s += "\t";
+            for (int j = 0; j < N; j++) {
+                s += DOWN[i][j] + " ";
+            }
+            s += "\t";
+            for (int j = 0; j < N; j++) {
+                s += RIGHT[i][j] + " ";
+            }
+            s += "\t";
+            for (int j = 0; j < N; j++) {
+                s += UP[i][j] + " ";
+            }
+            s += "\t";
+            for (int j = 0; j < N; j++) {
+                s += BACK[i][j] + " ";
+            }
+            s += "\t";
+            for (int j = 0; j < N; j++) {
+                s += FRONT[i][j] + " ";
+            }
+            s += "\n";
+        }
+        return s;
     }
 }
