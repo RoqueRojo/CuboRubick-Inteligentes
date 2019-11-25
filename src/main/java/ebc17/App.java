@@ -26,17 +26,19 @@ public class App {
         Problema prob = new Problema();
 //        System.out.println(prob.getEstadoInicial());
 //        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
+//        prob.getEstadoInicial().moveb(0);
+//       
+//        System.out.println(prob.getEstadoInicial());
+//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
 //        prob.getEstadoInicial().moveD(0);
 //        System.out.println(prob.getEstadoInicial());
 //        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moveb(1);
+//        prob.getEstadoInicial().moved(1);
+//     
 //        System.out.println(prob.getEstadoInicial());
 //        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moveB(2);
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().movel(1);
-//        System.out.println(prob.getEstadoInicial());
+////        prob.getEstadoInicial().movel(1);
+////        System.out.println(prob.getEstadoInicial());
 //        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
 //        prob.getEstadoInicial().moveD(0);
 //        System.out.println(prob.getEstadoInicial());
@@ -199,7 +201,7 @@ public class App {
 
     public static List<NodoArbol> CreaListaNodosArbol(List<Sucesor> LS, NodoArbol n_actual, int Prof_Max, String estrategia) {
         List<NodoArbol> LN = new ArrayList();
-        if (n_actual.getP() <= Prof_Max) { // si aún podemos seguir iterando por no alcanzar la profundidad máxima
+        if (n_actual.getP() < Prof_Max) { // si aún podemos seguir iterando por no alcanzar la profundidad máxima
             NodoArbol aux = null;
             for (Sucesor sucesor : LS) {
 //                dependiendo de la estrategia generamos los nodos
@@ -221,7 +223,7 @@ public class App {
                         break;
                     case "Voraz":
                         aux = new NodoArbol(n_actual, sucesor.getEstado(), n_actual.getCoste() + sucesor.getCoste(), sucesor.getAccion(),
-                                n_actual.getP() + 1, n_actual.getCoste() + sucesor.getEstado().getHeuristica());
+                                n_actual.getP() + 1, sucesor.getEstado().getHeuristica());
                         break;
                     case "A":
                         aux = new NodoArbol(n_actual, sucesor.getEstado(), n_actual.getCoste() + sucesor.getCoste(), sucesor.getAccion(),
