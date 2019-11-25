@@ -5,6 +5,7 @@ package ebc17;
 public class NodoArbol implements Comparable<NodoArbol> {
     
     private NodoArbol padre;
+    private int ID;
     private Estado estado;
     private double coste;
     private Accion accion;
@@ -32,8 +33,16 @@ public class NodoArbol implements Comparable<NodoArbol> {
         return estado;
     }
 
+    public int getID() {
+        return ID;
+    }
+    
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public double getCoste() {

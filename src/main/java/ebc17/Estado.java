@@ -364,13 +364,11 @@ public class Estado implements Cloneable {
 
     public List<Accion> getAcciones() { //metodo que obtiene una lista con todas las acciones posibles, segun la N del cubo
         List<Accion> acciones = new ArrayList<Accion>();
-        for (int i = 0; i < N; i++) {
-            acciones.add(new Accion('L', i));
-            acciones.add(new Accion('B', i));
-            acciones.add(new Accion('D', i));
-            acciones.add(new Accion('l', i));
-            acciones.add(new Accion('b', i));
-            acciones.add(new Accion('d', i));
+        char [] movimientos = {'B','b','D','d','L','l'};
+        for (int i = 0; i < movimientos.length; i++) {
+            for (int k = 0; k < N; k++) {
+                acciones.add(new Accion(movimientos[i],k));
+            }
         }
         return acciones;
     }
@@ -430,14 +428,14 @@ public class Estado implements Cloneable {
         for (int k = 0; k < caras.length; k++) {
             contador = contarColoresCara(caras[k], contador);
             for (int i = 0; i < caras.length; i++) {
-                if (contador[i] > 0.0) {                
-                    entropia = entropia + contador[i]/(N*N)*log(contador[i]/(N*N),6);
-                    System.out.println(entropia);
-                }              
-            }
-        }
+                if (contador[i] > 0.0) {
+                    entropia = entropia + contador[i] / (N * N) * log(contador[i] / (N * N), 6);
+                }
 
-        return entropia;
+            }
+            vaciarContador(contador);
+        }
+        return -entropia;
     }
 
     public double[] contarColoresCara(String cara, double[] contador) {
@@ -481,6 +479,12 @@ public class Estado implements Cloneable {
             }
         }
         return contador;
+    }
+
+    public void vaciarContador(double[] contador) {
+        for (int i = 0; i < contador.length; i++) {
+            contador[i] = 0.0;
+        }
     }
 
     public String toString() {
