@@ -24,35 +24,10 @@ public class App {
         int Prof_Max = 100, Inc_Prof = 1;
         Scanner sc = new Scanner(System.in);
         Problema prob = new Problema();
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moveb(0);
-//       
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moveD(0);
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moved(1);
-//     
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-////        prob.getEstadoInicial().movel(1);
-////        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moveD(0);
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-//        prob.getEstadoInicial().moveb(2);
-//        System.out.println(prob.getEstadoInicial());
-//        System.out.println(prob.getEstadoInicial().getID()+" "+prob.getEstadoInicial().getHeuristica());
-
-//        List<Accion> LA = prob.getEstadoInicial().getAcciones();
-//        for (int i = 0; i < LA.size(); i++) {
-//            System.out.println(LA.get(i));
-//        }
-
-        System.out.println("Sistemas Inteligentes-Cubo Rubick");
+//        System.out.println(prob.getEstadoInicial().getID());
+//        prob.getEstadoInicial().moveL(0);
+//        System.out.println(prob.getEstadoInicial().getID());
+        System.out.println("Sistemas Inteligentes-Cubo Rubik");
         do {
             System.out.print("¿Desea Utilizar Poda?\n\t1. Con Poda \n\t2. Sin Poda\n(Elija 1 o 2): ");
             opcion = sc.next();
@@ -150,7 +125,7 @@ public class App {
         while (!solucion && !frontera.EstaVacia()) {
 
             n_actual = frontera.Eliminar();
-            n_actual.setID(total);
+           
             if (prob.esObjetivo(n_actual.getEstado())) {
                 solucion = true;
             } else {

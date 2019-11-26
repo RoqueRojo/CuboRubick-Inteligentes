@@ -213,7 +213,7 @@ public class Estado implements Cloneable {
             DOWN[i][col] = aux[i];
         }
         if (col == 0) {
-            copiarMatriz(rotarMatrizIzq(LEFT), LEFT);
+            copiarMatriz(rotarMatrizDer(LEFT), LEFT);
         }
         if (col == N - 1) {
             copiarMatriz(rotarMatrizDer(RIGHT), RIGHT);
@@ -230,7 +230,7 @@ public class Estado implements Cloneable {
             DOWN[i][col] = aux[i];
         }
         if (col == 0) {
-            copiarMatriz(rotarMatrizDer(LEFT), LEFT);
+            copiarMatriz(rotarMatrizIzq(LEFT), LEFT);
         }
         if (col == N - 1) {
             copiarMatriz(rotarMatrizIzq(RIGHT), RIGHT);
