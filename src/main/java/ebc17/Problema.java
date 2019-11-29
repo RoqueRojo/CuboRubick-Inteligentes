@@ -34,9 +34,4 @@ public class Problema {
     public void setEstadoInicial(Estado estadoInicial) {
         this.estadoInicial = estadoInicial;
     }
-
-    @Override
-    public String toString() {
-        return "Problema{" + "espacioDeEstados=" + espacioDeEstados + ", estadoInicial=" + estadoInicial + '}';
-    }
 }

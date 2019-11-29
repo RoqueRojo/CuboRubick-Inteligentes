@@ -24,10 +24,8 @@ public class App {
         int Prof_Max = 100, Inc_Prof = 1;
         Scanner sc = new Scanner(System.in);
         Problema prob = new Problema();
-//        System.out.println(prob.getEstadoInicial().getID());
-//        prob.getEstadoInicial().moveL(0);
-//        System.out.println(prob.getEstadoInicial().getID());
-        System.out.println("Sistemas Inteligentes-Cubo Rubik");
+
+        System.out.println("Practica Sistemas Inteligentes - Cubo Rubik - Equipo BC17");
         do {
             System.out.print("¿Desea Utilizar Poda?\n\t1. Con Poda \n\t2. Sin Poda\n(Elija 1 o 2): ");
             opcion = sc.next();
@@ -107,7 +105,6 @@ public class App {
         if (!solucion) {
             System.out.println("Solucion no encontrada en la profundidad maxima dada");
         }
-
     }
 
     public static boolean Busqueda_Acotada(Problema prob, String estrategia, int Prof_Max, boolean conPoda) throws IOException {
@@ -125,7 +122,7 @@ public class App {
         while (!solucion && !frontera.EstaVacia()) {
 
             n_actual = frontera.Eliminar();
-           
+
             if (prob.esObjetivo(n_actual.getEstado())) {
                 solucion = true;
             } else {
@@ -138,13 +135,10 @@ public class App {
                     if (conPoda) { // si se ha elegido poda no se insertan en la frontera los estados repetidos                   
                         String nodoString = nodo.getEstado().getID();
                         if (nodosVisitados.containsKey(nodoString)) {
-                            if ((nodo.getF() < nodosVisitados.get(nodoString).doubleValue())) {
-                                if ((nodo.getF() < nodosVisitados.get(nodoString).doubleValue() && !estrategia.contains("Profundidad"))
-                                      || (nodo.getF() > nodosVisitados.get(nodoString).doubleValue() && estrategia.contains("Profundidad"))) {
-                                    nodo.setID(++total);
-                                    frontera.Insertar(nodo);
-                                    nodosVisitados.replace(nodoString, nodo.getF());
-                                }
+                            if ((Math.abs(nodo.getF()) < Math.abs(nodosVisitados.get(nodoString)))) {
+                                nodo.setID(++total);
+                                frontera.Insertar(nodo);
+                                nodosVisitados.replace(nodoString, nodo.getF());
                             }
                         } else {
                             nodo.setID(++total);
@@ -188,9 +182,8 @@ public class App {
                     case "ProfundidadSimple":
                     case "ProfundidadAcotada":
                     case "ProfundidadIterativa":
-
                         aux = new NodoArbol(n_actual, sucesor.getEstado(), n_actual.getCoste() + sucesor.getCoste(), sucesor.getAccion(),
-                                n_actual.getP() + 1, Prof_Max - (n_actual.getP() + 1));
+                                n_actual.getP() + 1, (-n_actual.getP() - 1));
                         break;
                     case "CosteUniforme":
                         aux = new NodoArbol(n_actual, sucesor.getEstado(), n_actual.getCoste() + sucesor.getCoste(), sucesor.getAccion(),
@@ -206,7 +199,6 @@ public class App {
                         break;
                 }
                 LN.add(aux);
-
             }
         }
         return LN;
@@ -224,28 +216,24 @@ public class App {
         return solucion;
     }
 
+    //metodo que genera un fichero con el nombre Estrategia(estrategiaelegida).txt
     public static void generarFichero(Deque<NodoArbol> camino, String estrategia, int total) throws IOException {
-        File archivo = new File("Path" + estrategia + ".txt");
+        DecimalFormat df = new DecimalFormat("#0.00");
+        File archivo = new File("Estrategia" + estrategia + ".txt");
         FileWriter file = new FileWriter(archivo);
         PrintWriter pw = new PrintWriter(file);
         pw.println("La soluci\u00f3n es: ");
-        pw.println("Estrategia: " + estrategia.toUpperCase());
+        pw.println("Estrategia elegida: " + estrategia.toUpperCase());
         pw.println("Total Nodos Generados: " + total);
-        pw.println("Profundidad: " + (camino.getLast().getP() + 1));
-        pw.println("Costo: " + (camino.getLast().getCoste()));
+        pw.println("Profundidad de la solucion: " + (camino.getLast().getP() + 1));
+        pw.println("Costo de la solucion: " + (int) (camino.getLast().getCoste()));
         pw.println("");
         int i = 0;
         for (NodoArbol nodoarbol : camino) {
             if (i == 0) {
-                if (estrategia.equals("Voraz") || estrategia.equals("A")) {
-                    pw.println("None " + nodoarbol.getEstado().getHeuristica() + " " + nodoarbol.getP() + " " + nodoarbol.getCoste());
-                } else {
-                    pw.println("None " + nodoarbol.getF() + " " + nodoarbol.getP() + " " + nodoarbol.getCoste());
-                }
-                pw.println(nodoarbol.getEstado());
+                pw.println("[" + nodoarbol.getID() + "]" + "([None]" + nodoarbol.getEstado().getID() + ",c=" + (int) nodoarbol.getCoste() + ",p=" + nodoarbol.getP() + ",h=" + df.format(nodoarbol.getEstado().getHeuristica()) + ",f=" + nodoarbol.getF() + ")");
             } else {
-                pw.println(nodoarbol.getAccion() + " " + nodoarbol.getF() + " " + nodoarbol.getP() + " " + nodoarbol.getCoste());
-                pw.println(nodoarbol.getEstado().getID());
+                pw.println("[" + nodoarbol.getID() + "]" + "([" + nodoarbol.getAccion() + "]" + nodoarbol.getEstado().getID() + ",c=" + (int) nodoarbol.getCoste() + ",p=" + nodoarbol.getP() + ",h=" + df.format(Math.abs(nodoarbol.getEstado().getHeuristica())) + ",f=" + df.format(Math.abs(nodoarbol.getF())) + ")");
             }
             pw.println("");
             i++;
@@ -255,26 +243,19 @@ public class App {
 
 //     método para mostrar la solución por consola
     public static void escribirConsola(Deque<NodoArbol> camino, String estrategia, int total) {
-        
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#0.00");
         System.out.println("\nLa soluci\u00f3n es: ");
-        System.out.println("Estrategia: " + estrategia.toUpperCase());
+        System.out.println("Estrategia elegida: " + estrategia.toUpperCase());
         System.out.println("Total Nodos Generados: " + total);
-        System.out.println("Profundidad: " + (camino.getLast().getP() + 1));
-        System.out.println("Costo: " + camino.getLast().getCoste());
+        System.out.println("Profundidad de la solucion: " + (camino.getLast().getP() + 1));
+        System.out.println("Costo de la solucion: " + (int) camino.getLast().getCoste());
         System.out.println("");
         int i = 0;
         for (NodoArbol nodoarbol : camino) {
             if (i == 0) {
-                if (estrategia.equals("Voraz") || estrategia.equals("A")) {
-                    System.out.println(nodoarbol.getID() + "None " + df.format(nodoarbol.getEstado().getHeuristica()) + " " + nodoarbol.getP() + " " + nodoarbol.getCoste());
-                } else {
-                    System.out.println("None " + df.format(nodoarbol.getF()) + " " + nodoarbol.getP() + " " + nodoarbol.getCoste());
-                }
-                System.out.println(nodoarbol.getEstado().getID());
+                System.out.println("[" + nodoarbol.getID() + "]" + "([None]" + nodoarbol.getEstado().getID() + ",c=" + (int) nodoarbol.getCoste() + ",p=" + nodoarbol.getP() + ",h=" + df.format(nodoarbol.getEstado().getHeuristica()) + ",f=" + nodoarbol.getF() + ")");
             } else {
-                System.out.println("[" + nodoarbol.getID() + "]" + nodoarbol.getAccion() + " f=" + df.format(nodoarbol.getF()) + " P=" + nodoarbol.getP() + " C=" + nodoarbol.getCoste());
-                System.out.println(nodoarbol.getEstado().getID());
+                System.out.println("[" + nodoarbol.getID() + "]" + "([" + nodoarbol.getAccion() + "]" + nodoarbol.getEstado().getID() + ",c=" + (int) nodoarbol.getCoste() + ",p=" + nodoarbol.getP() + ",h=" + df.format(nodoarbol.getEstado().getHeuristica()) + ",f=" + df.format(Math.abs(nodoarbol.getF())) + ")");
             }
             System.out.println("");
             i++;

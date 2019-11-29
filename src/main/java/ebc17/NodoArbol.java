@@ -3,7 +3,7 @@ package ebc17;
 
 
 public class NodoArbol implements Comparable<NodoArbol> {
-    
+    //atributos basicos de un nodo del arbol de busqueda
     private NodoArbol padre;
     private int ID;
     private Estado estado;
@@ -76,12 +76,20 @@ public class NodoArbol implements Comparable<NodoArbol> {
     public void setF(double f) {
         this.f = f;
     }
+    //forma en la que ordenamos el nodo de un arbol concreto segun la f y el Id (el id solo si el valor de la f coincide)
     public int compareTo(NodoArbol nodo){
         int r=0;
         if(nodo.getF()<getF()){
             r = +1;
         }else if (nodo.getF()>getF()){
-            r = -1;
+            r = -1;        
+        
+        }else if (nodo.getF()==getF()){
+            if(nodo.getID()<getID()){
+                r=+1;
+            }else{
+                r=-1;
+            }
         }
         return r;
     }

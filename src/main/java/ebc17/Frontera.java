@@ -3,7 +3,7 @@ package ebc17;
 import java.util.PriorityQueue;
 
 public class Frontera {
-
+    //estructura de datos elegida priority queue
     private PriorityQueue<NodoArbol> colaNodos = new PriorityQueue<NodoArbol>();
 
     public Frontera() {

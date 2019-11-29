@@ -75,7 +75,7 @@ public class Estado implements Cloneable {
         }
         return obj; //devolvemos una copia exacta del cubo
     }
-
+//obtenemos el tamaño del cubo, para automatizarlo mas
     public int getN(String fileJSON) throws FileNotFoundException, IOException, ParseException {
         Object obj = new JSONParser().parse(new FileReader(fileJSON));
         JSONObject jo = (JSONObject) obj;
@@ -186,8 +186,8 @@ public class Estado implements Cloneable {
             System.out.println();
         }
     }
-
-    public static String getMD5(String input) { //metodo que cifra un String
+//metodo que cifra un String segun un md5
+    public static String getMD5(String input) { 
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] messageDigest = md.digest(input.getBytes());
@@ -202,7 +202,7 @@ public class Estado implements Cloneable {
             throw new RuntimeException(e);
         }
     }
-
+//movimiento L
     public void moveL(int col) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
@@ -212,6 +212,7 @@ public class Estado implements Cloneable {
             BACK[i][col] = DOWN[i][col];
             DOWN[i][col] = aux[i];
         }
+        //cuando se hace en una posición que es el limite superior o inferior del cubo rota hacia la derecha
         if (col == 0) {
             copiarMatriz(rotarMatrizDer(LEFT), LEFT);
         }
@@ -219,7 +220,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizDer(RIGHT), RIGHT);
         }
     }
-
+//movimiento l
     public void movel(int col) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
@@ -229,6 +230,7 @@ public class Estado implements Cloneable {
             FRONT[i][col] = DOWN[i][col];
             DOWN[i][col] = aux[i];
         }
+        //cuando se hace en una posición que es el limite superior o inferior del cubo rota hacia la izquierda
         if (col == 0) {
             copiarMatriz(rotarMatrizIzq(LEFT), LEFT);
         }
@@ -236,7 +238,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizIzq(RIGHT), RIGHT);
         }
     }
-
+//movimiento D
     public void moveD(int dentro) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
@@ -246,6 +248,7 @@ public class Estado implements Cloneable {
             BACK[N - 1 - dentro][N - 1 - i] = LEFT[i][N - 1 - dentro];
             LEFT[i][N - 1 - dentro] = aux[i];
         }
+        //cuando se hace en una posición que es el limite superior o inferior del cubo rota hacia la derecha
         if (dentro == 0) {
             copiarMatriz(rotarMatrizDer(DOWN), DOWN);
         }
@@ -253,7 +256,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizDer(UP), UP);
         }
     }
-
+//movimiento d
     public void moved(int dentro) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
@@ -263,6 +266,7 @@ public class Estado implements Cloneable {
             BACK[N - 1 - dentro][N - 1 - i] = RIGHT[N - 1 - i][dentro];
             RIGHT[N - 1 - i][dentro] = aux[i];
         }
+        //cuando se hace en una posición que es el limite superior o inferior del cubo rota hacia la izquierda
         if (dentro == 0) {
             copiarMatriz(rotarMatrizIzq(DOWN), DOWN);
         }
@@ -270,7 +274,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizIzq(UP), UP);
         }
     }
-
+//movimiento B
     public void moveB(int fil) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
@@ -280,6 +284,7 @@ public class Estado implements Cloneable {
             UP[fil][i] = RIGHT[fil][i];
             RIGHT[fil][i] = aux[i];
         }
+        //cuando se hace en una posición que es el limite superior o inferior del cubo rota hacia la derecha
         if (fil == 0) {
             copiarMatriz(rotarMatrizDer(BACK), BACK);
         }
@@ -287,7 +292,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizDer(FRONT), FRONT);
         }
     }
-
+//movimiento b
     public void moveb(int fil) {
         int aux[] = new int[N];
         for (int i = 0; i < N; i++) {
@@ -297,6 +302,7 @@ public class Estado implements Cloneable {
             UP[fil][i] = LEFT[fil][i];
             LEFT[fil][i] = aux[i];
         }
+        //cuando se hace en una posición que es el limite superior o inferior del cubo rota hacia la izquierda
         if (fil == 0) {
             copiarMatriz(rotarMatrizIzq(BACK), BACK);
         }
@@ -304,7 +310,7 @@ public class Estado implements Cloneable {
             copiarMatriz(rotarMatrizIzq(FRONT), FRONT);
         }
     }
-
+//metodo que gira una cara hacia la izquierda 
     public int[][] rotarMatrizIzq(int matriz[][]) {
         int[][] otherMatriz = new int[matriz[0].length][matriz[0].length];
         for (int i = 0; i < matriz.length; i++) {
@@ -316,7 +322,7 @@ public class Estado implements Cloneable {
         }
         return otherMatriz;
     }
-
+//metodo que rota una cara hacia la derecha
     public int[][] rotarMatrizDer(int matriz[][]) {
         int[][] otherMatriz = new int[matriz[0].length][matriz[0].length];
         for (int i = 0; i < matriz.length; i++) {
@@ -328,7 +334,7 @@ public class Estado implements Cloneable {
         }
         return otherMatriz;
     }
-
+//metodo que copia una matriz en otra
     public void copiarMatriz(int origen[][], int destino[][]) {
         for (int i = 0; i < destino.length; i++) {
             for (int j = 0; j < destino[i].length; j++) {
@@ -336,8 +342,8 @@ public class Estado implements Cloneable {
             }
         }
     }
-
-    public Estado getEstado(Accion a) { //metodo que ontiene el estado de un clon del cubo despues de realizar una accion
+//metodo que ontiene el estado de un clon del cubo despues de realizar una accion
+    public Estado getEstado(Accion a) { 
         Estado estado = (Estado) this.clone();
         switch (a.getMovimiento()) {
             case 'L':
@@ -361,8 +367,8 @@ public class Estado implements Cloneable {
         }
         return estado;
     }
-
-    public List<Accion> getAcciones() { //metodo que obtiene una lista con todas las acciones posibles, segun la N del cubo
+//metodo que obtiene una lista con todas las acciones posibles, segun la N del cubo
+    public List<Accion> getAcciones() { 
         List<Accion> acciones = new ArrayList<Accion>();
         char [] movimientos = {'B','b','D','d','L','l'};
         for (int i = 0; i < movimientos.length; i++) {
@@ -372,55 +378,56 @@ public class Estado implements Cloneable {
         }
         return acciones;
     }
-
-    public boolean esObjetivo() {
-        boolean correcto = true;
-        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
-        for (int k = 0; k < caras.length && correcto; k++) {
-            for (int i = 0; i < LEFT.length && correcto; i++) {
-                for (int j = 0; j < LEFT.length && correcto; j++) {
-                    switch (caras[k]) {
-                        case "LEFT":
-                            if (LEFT[i][j] != LEFT[0][0]) {
-                                correcto = false;
-                            }
-                            break;
-                        case "DOWN":
-                            if (DOWN[i][j] != DOWN[0][0]) {
-                                correcto = false;
-                            }
-                            break;
-                        case "RIGHT":
-                            if (RIGHT[i][j] != RIGHT[0][0]) {
-                                correcto = false;
-                            }
-                            break;
-                        case "UP":
-                            if (UP[i][j] != UP[0][0]) {
-                                correcto = false;
-                            }
-                            break;
-                        case "BACK":
-                            if (BACK[i][j] != BACK[0][0]) {
-                                correcto = false;
-                            }
-                            break;
-                        case "FRONT":
-                            if (FRONT[i][j] != FRONT[0][0]) {
-                                correcto = false;
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-        return correcto;
+    // función que nos dice si hemos llegado a un cubo que es objetivo
+    public boolean esObjetivo() { 
+        
+//        boolean correcto = true;
+//        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
+//        for (int k = 0; k < caras.length && correcto; k++) {
+//            for (int i = 0; i < LEFT.length && correcto; i++) {
+//                for (int j = 0; j < LEFT.length && correcto; j++) {
+//                    switch (caras[k]) {
+//                        case "LEFT":
+//                            if (LEFT[i][j] != LEFT[0][0]) {
+//                                correcto = false;
+//                            }
+//                            break;
+//                        case "DOWN":
+//                            if (DOWN[i][j] != DOWN[0][0]) {
+//                                correcto = false;
+//                            }
+//                            break;
+//                        case "RIGHT":
+//                            if (RIGHT[i][j] != RIGHT[0][0]) {
+//                                correcto = false;
+//                            }
+//                            break;
+//                        case "UP":
+//                            if (UP[i][j] != UP[0][0]) {
+//                                correcto = false;
+//                            }
+//                            break;
+//                        case "BACK":
+//                            if (BACK[i][j] != BACK[0][0]) {
+//                                correcto = false;
+//                            }
+//                            break;
+//                        case "FRONT":
+//                            if (FRONT[i][j] != FRONT[0][0]) {
+//                                correcto = false;
+//                            }
+//                            break;
+//                    }
+//                }
+//            }
+//        }
+        return getHeuristica()==0;
     }
-
+    //funcion estandar de un logaritmo de base N para utilizarla en el calculo de la heuristica
     public double log(double num, int base) {
         return (Math.log(num) / Math.log(base));
     }
-
+    //metodo que calcula la heuristica de un estado, devolviendo el valor absoluto de la misma.
     public double getHeuristica() {
         double entropia = 0;
         String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
@@ -431,15 +438,13 @@ public class Estado implements Cloneable {
                 if (contador[i] > 0.0) {
                     entropia = entropia + contador[i] / (N * N) * log(contador[i] / (N * N), 6);
                 }
-
             }
             vaciarContador(contador);
         }
-        return -entropia;
+        return Math.abs(entropia);
     }
-
+    //metodo que genera un vector con la cantidad de numeros que hay en una cara, correspondiendo con su posicion en el mismo
     public double[] contarColoresCara(String cara, double[] contador) {
-
         for (int k = 0; k < contador.length; k++) {
             for (int i = 0; i < LEFT.length; i++) {
                 for (int j = 0; j < LEFT.length; j++) {
@@ -480,7 +485,7 @@ public class Estado implements Cloneable {
         }
         return contador;
     }
-
+    //metodo que vuelve a iniciar el vector de contar colores a 0
     public void vaciarContador(double[] contador) {
         for (int i = 0; i < contador.length; i++) {
             contador[i] = 0.0;
