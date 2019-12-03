@@ -379,7 +379,8 @@ public class Estado implements Cloneable {
         return acciones;
     }
     // función que nos dice si hemos llegado a un cubo que es objetivo
-    public boolean esObjetivo() {       
+    public boolean esObjetivo() {    
+        
 //        boolean correcto = true;
 //        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
 //        for (int k = 0; k < caras.length && correcto; k++) {
