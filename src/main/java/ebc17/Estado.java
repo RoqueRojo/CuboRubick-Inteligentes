@@ -379,8 +379,7 @@ public class Estado implements Cloneable {
         return acciones;
     }
     // función que nos dice si hemos llegado a un cubo que es objetivo
-    public boolean esObjetivo() { 
-        
+    public boolean esObjetivo() {       
 //        boolean correcto = true;
 //        String caras[] = {"LEFT", "DOWN", "RIGHT", "UP", "BACK", "FRONT"};
 //        for (int k = 0; k < caras.length && correcto; k++) {
@@ -485,7 +484,7 @@ public class Estado implements Cloneable {
         }
         return contador;
     }
-    //metodo que vuelve a iniciar el vector de contar colores a 0
+    //metodo que vuelve a iniciar el vector de contar colores a 0   
     public void vaciarContador(double[] contador) {
         for (int i = 0; i < contador.length; i++) {
             contador[i] = 0.0;
